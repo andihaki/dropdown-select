@@ -7,7 +7,7 @@ const Wrapper = "mt-1";
 const InputWrapper = "flex gap-1 items-center border-gray-100 border px-2 mt-1";
 const Input = "h-8 grow border-none";
 
-const Dropdown = "border-gray-100 border";
+const Dropdown = "border-gray-100 border z-10000";
 const Item = "cursor-pointer select-none p-2 hover:bg-gray-200";
 
 const cx = {

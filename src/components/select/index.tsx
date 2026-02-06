@@ -17,6 +17,7 @@ const Select = ({
   withSearch,
   multiple = true,
   outlined = true,
+  pupupRender,
 }: SelectProps) => {
   const { show, toggleShow, selected, handleOnSelect, handleOnClear, inputs } =
     useSelectModel();
@@ -65,7 +66,6 @@ const Select = ({
       <div
         style={{
           display: show ? "block" : "none",
-          ...(styles?.dropdown ?? {}),
         }}
         className={cx.Wrapper}
       >
@@ -93,22 +93,31 @@ const Select = ({
             )}
           </div>
         )}
-        <ul className={cx.Dropdown}>
-          {/* @todo: i think options need to be filtered by inputs.search? */}
-          {options.map((item) => (
-            <li
-              key={item.value}
-              className={
-                selected.some((val) => val === item.value)
-                  ? `${cx.Item} bg-gray-100`
-                  : cx.Item
-              }
-              onClick={() => handleOnSelect(item.value, multiple, item)}
-            >
-              <HighlightedLabel text={item.label} search={inputs.search} />
-            </li>
-          ))}
-        </ul>
+        {pupupRender ?? (
+          <ul className={cx.Dropdown} style={styles?.dropdown}>
+            {options
+              .filter((item) =>
+                inputs.search
+                  ? item.label
+                      .toLocaleLowerCase()
+                      .includes(inputs.search.toLocaleLowerCase())
+                  : true,
+              )
+              .map((item) => (
+                <li
+                  key={item.value}
+                  className={
+                    selected.some((val) => val === item.value)
+                      ? `${cx.Item} bg-gray-100`
+                      : cx.Item
+                  }
+                  onClick={() => handleOnSelect(item.value, multiple, item)}
+                >
+                  <HighlightedLabel text={item.label} search={inputs.search} />
+                </li>
+              ))}
+          </ul>
+        )}
       </div>
     </>
   );
