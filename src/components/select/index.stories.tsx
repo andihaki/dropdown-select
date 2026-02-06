@@ -21,6 +21,8 @@ const meta = {
     // @todo: proper icon, font-awesome / others
     prefixIcon: "🔍",
     suffixIcon: "🔽",
+    withSearch: true,
+    outlined: false,
   },
 } satisfies Meta<typeof Select>;
 

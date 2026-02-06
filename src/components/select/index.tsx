@@ -1,6 +1,7 @@
 import type { SelectProps } from "./types";
 import cx from "./style";
 import useSelectModel from "./useSelectModel";
+import HighlightedLabel from "./components/highlighted-label";
 
 const Select = ({
   options,
@@ -10,35 +11,90 @@ const Select = ({
   placeholder,
   prefixIcon,
   suffixIcon,
+  withSearch,
+  multiple,
+  outlined = true,
 }: SelectProps) => {
-  const { show, toggleShow, selected, setSelected } = useSelectModel();
+  const { show, toggleShow, selected, handleOnSelect, handleOnClear, inputs } =
+    useSelectModel();
+
+  const clearIcon = "⊗";
+  const rootClass = className
+    ? cx.Outlined.concat(` ${className}`)
+    : cx.Outlined;
 
   return (
     <>
       <div
         style={styles?.root ?? style}
-        className={cx.Root}
+        className={outlined ? rootClass.concat(` ${cx.Root}`) : rootClass} // @todo: add clsx when needed
         onClick={toggleShow}
         // @todo: outside click to close dropdown
       >
-        <span className="grow">{placeholder}</span>
-        <span className="justify-end">{suffixIcon}</span>
+        <span className="grow">
+          {Boolean(selected.length) ? selected.join(", ") : placeholder}
+        </span>
+        <span className="justify-end group relative select-none">
+          {Boolean(selected.length) ? (
+            <>
+              <span className="group-hover:hidden">{suffixIcon}</span>
+              <span
+                className="hidden group-hover:inline"
+                onClick={handleOnClear}
+              >
+                {clearIcon}
+              </span>
+            </>
+          ) : (
+            <span>{suffixIcon}</span>
+          )}
+        </span>
       </div>
       <div
         style={{
           display: show ? "block" : "none",
           ...(styles?.dropdown ?? {}),
         }}
+        className={cx.Wrapper}
       >
-        <div className={cx.Wrapper}>
-          <span>{prefixIcon}</span>
-          <input className={cx.Input} onBlur={toggleShow} />
-        </div>
-        <ul
-          className={cx.Dropdown} // @todo: add clsx for handle classname props
-        >
+        {withSearch && (
+          <div className={cx.InputWrapper}>
+            <span>{prefixIcon}</span>
+            <input
+              className={cx.Input}
+              onBlur={toggleShow}
+              value={inputs.search}
+              onChange={(e) => {
+                inputs.setSearch(e.target.value);
+              }}
+            />
+            {inputs.search && (
+              <span
+                className="cursor-pointer"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  inputs.setSearch("");
+                }}
+              >
+                {clearIcon}
+              </span>
+            )}
+          </div>
+        )}
+        <ul className={cx.Dropdown}>
+          {/* @todo: i think options need to be filtered by inputs.search? */}
           {options.map((item) => (
-            <li>{item.label}</li>
+            <li
+              key={item.value}
+              className={
+                selected.some((val) => val === item.value)
+                  ? cx.Item.concat(" bg-gray-100")
+                  : cx.Item
+              }
+              onClick={() => handleOnSelect(item.value, multiple, item)}
+            >
+              <HighlightedLabel text={item.label} search={inputs.search} />
+            </li>
           ))}
         </ul>
       </div>
