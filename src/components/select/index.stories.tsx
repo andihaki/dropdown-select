@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import Select from "./index";
+import ChevronDown from "../../icons/chevron-down";
+import MagnifyingGlass from "../../icons/magnifying-glass";
 
 const mockOptions = [
   {
@@ -18,9 +20,8 @@ const meta = {
   args: {
     options: mockOptions,
     placeholder: "Please select...",
-    // @todo: proper icon, font-awesome / others
-    prefixIcon: "🔍",
-    suffixIcon: "🔽",
+    searchIcon: <MagnifyingGlass />,
+    suffixIcon: <ChevronDown />,
     withSearch: true,
     outlined: false,
   },
