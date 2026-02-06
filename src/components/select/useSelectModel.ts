@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import type { SelectOption, SelectValue } from "./types";
+import type { SelectOption, SelectValue, SpanEventType } from "./types";
 
 const useSelectModel = () => {
   const [search, setSearch] = useState("");
@@ -13,20 +13,19 @@ const useSelectModel = () => {
   const handleOnSelect = (
     value: SelectValue,
     multiple?: boolean,
-    _?: SelectOption,
+    _option?: SelectOption,
   ) => {
     setSelected((prev) => {
       if (!prev.length || !multiple) return [value];
+      const isSelected = prev.some((val) => val === value);
 
-      return prev.some((val) => val === value)
+      return isSelected
         ? prev.filter((val) => val !== value)
         : [...prev, value];
     });
   };
 
-  const handleOnClear = (
-    event: React.MouseEvent<HTMLSpanElement, MouseEvent>,
-  ) => {
+  const handleOnClear = (event: SpanEventType) => {
     event.stopPropagation();
     setSelected([]);
   };
