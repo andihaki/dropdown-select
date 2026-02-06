@@ -1,5 +1,7 @@
 import type { CSSProperties, ReactNode } from "react";
 
+export type SpanEventType = React.MouseEvent<HTMLSpanElement, MouseEvent>;
+
 export type SelectValue = string | number;
 export type SelectOption = { label: string; value: SelectValue };
 
