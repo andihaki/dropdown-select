@@ -1,7 +1,10 @@
 import type { CSSProperties, ReactNode } from "react";
 
+export type SelectValue = string | number;
+export type SelectOption = { label: string; value: SelectValue };
+
 export interface SelectProps {
-  options: { label: string; value: string | number }[];
+  options: SelectOption[];
   placeholder?: string;
   withSearch?: boolean;
   multiple?: boolean;
