@@ -12,7 +12,7 @@ const Select = ({
   styles,
   className,
   placeholder,
-  prefixIcon,
+  searchIcon,
   suffixIcon,
   withSearch,
   multiple = true,
@@ -23,6 +23,9 @@ const Select = ({
   const isEmpty = !Boolean(selected.length);
 
   const rootClass = className ? `${cx.Outlined} ${className}` : cx.Outlined;
+  const suffixClass = show
+    ? "rotate-180 transition-transform"
+    : "transition-transform";
 
   return (
     <>
@@ -43,10 +46,12 @@ const Select = ({
         />
         <span className="justify-end group relative select-none">
           {isEmpty ? (
-            <span>{suffixIcon}</span>
+            <div className={suffixClass}>{suffixIcon}</div>
           ) : (
             <>
-              <span className="group-hover:hidden">{suffixIcon}</span>
+              <div className={`${suffixClass} group-hover:hidden`}>
+                {suffixIcon}
+              </div>
               <span
                 className="hidden group-hover:inline"
                 onClick={handleOnClear}
@@ -66,7 +71,7 @@ const Select = ({
       >
         {withSearch && (
           <div className={cx.InputWrapper}>
-            <span>{prefixIcon}</span>
+            <span>{searchIcon}</span>
             <input
               className={cx.Input}
               onBlur={toggleShow}

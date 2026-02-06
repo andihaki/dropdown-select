@@ -18,5 +18,5 @@ export interface SelectProps {
   };
   className?: string;
   suffixIcon?: string | ReactNode;
-  prefixIcon?: string | ReactNode;
+  searchIcon?: string | ReactNode;
 }
