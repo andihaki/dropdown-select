@@ -30,8 +30,9 @@
   },
   "scripts": {
     "dev": "vite",
-    "build:lib": "tsc -b && vite build",
-    "build": "vite build --config vite.config.demo.ts",
+    "build": "tsc -b && vite build",
+    "build:demo": "GITHUB_PAGES=true vite build --config vite.config.demo.ts",
+    "build:localdemo": "vite build --config vite.config.demo.ts",
     "lint": "eslint .",
     "preview": "vite preview --config vite.config.demo.ts --outDir dist-demo",
     "storybook": "storybook dev -p 6006",

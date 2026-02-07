@@ -12,7 +12,7 @@ const dirname =
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   root: "./",
-  base: "/dropdown-select/", // Change to your repo name
+  base: process.env.GITHUB_PAGES ? "/dropdown-select/" : "/",
   build: {
     outDir: "./dist-demo",
     emptyOutDir: true,
