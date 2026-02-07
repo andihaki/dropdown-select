@@ -13,8 +13,13 @@ const Selected = ({ placeholder, data, onClick }: Props) => {
     event.preventDefault();
     onClick(item);
   };
+
   if (!data.length) {
-    return <span className={cx.Empty}>{placeholder}</span>;
+    return (
+      <span className={`${cx.Empty} text-gray-400 select-none cursor-pointer`}>
+        {placeholder}
+      </span>
+    );
   }
   return (
     <ul className={cx.Wrapper}>
