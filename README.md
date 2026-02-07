@@ -8,14 +8,14 @@ yarn storybook
 or demo apps
 
 ```bash
-yarn build:demo
+yarn build
 yarn preview
 ```
 
 # install as library / package
 
 ```bash
-yarn build && yarn pack
+yarn build:lib && yarn pack
 yarn add file:/your-build-result-location
 ```
 
