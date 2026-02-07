@@ -1,8 +1,15 @@
-#
+# local development
 
 ```bash
 yarn install
 yarn storybook
+```
+
+# install as library / package
+
+```bash
+yarn build && yarn pack
+yarn add file:/your-build-result-location
 ```
 
 # React + TypeScript + Vite
