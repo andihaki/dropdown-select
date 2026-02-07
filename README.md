@@ -5,6 +5,13 @@ yarn install
 yarn storybook
 ```
 
+or demo apps
+
+```bash
+yarn build:demo
+yarn preview
+```
+
 # install as library / package
 
 ```bash
