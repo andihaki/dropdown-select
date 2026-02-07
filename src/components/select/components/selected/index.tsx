@@ -16,7 +16,9 @@ const Selected = ({ placeholder, data, onClick }: Props) => {
 
   if (!data.length) {
     return (
-      <span className={`${cx.Empty} text-gray-400 select-none cursor-pointer`}>
+      <span
+        className={`${cx.Empty} text-gray-400 select-none cursor-pointer mr-2`}
+      >
         {placeholder}
       </span>
     );

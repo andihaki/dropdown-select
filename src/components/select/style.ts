@@ -4,7 +4,8 @@ const Outlined =
 
 const Wrapper = "mt-1";
 
-const InputWrapper = "flex gap-1 items-center border-gray-100 border px-2 mt-1";
+const InputWrapper =
+  "flex gap-1 items-center border-gray-100 border px-2 mt-1 bg-white";
 const Input = "h-8 grow border-none outline-none bg-transparent";
 
 const cx = {
