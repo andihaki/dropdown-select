@@ -1,7 +1,13 @@
+import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+
+import MagnifyingGlass from "../../icons/magnifying-glass";
+import ChevronDown from "../../icons/chevron-down";
+import Dropdown from "./components/dropdown";
+import Selected from "./components/selected";
+import Search from "./components/search";
 import type { SelectProps } from "./types";
 import useSelectModel from "./useSelectModel";
-import HighlightedLabel from "./components/highlighted-label";
-import Selected from "./components/selected";
 import cx from "./style";
 
 export const clearIcon = "⊗";
@@ -11,29 +17,99 @@ const Select = ({
   style,
   styles,
   className,
-  placeholder,
-  searchIcon,
-  suffixIcon,
+  placeholder = "placeholder",
+  searchIcon = <MagnifyingGlass />,
+  suffixIcon = <ChevronDown />,
   withSearch,
   multiple = true,
-  outlined = true,
+  outlined,
+  popupRender,
+  portalTarget,
 }: SelectProps) => {
   const { show, toggleShow, selected, handleOnSelect, handleOnClear, inputs } =
     useSelectModel();
   const isEmpty = !Boolean(selected.length);
+
+  const triggerRef = useRef<HTMLDivElement>(null);
+  const [dropdownPosition, setDropdownPosition] = useState({
+    top: 0,
+    left: 0,
+    width: "fit-content",
+  });
+
+  useEffect(() => {
+    if (show && triggerRef.current) {
+      const rect = (portalTarget ?? triggerRef.current).getBoundingClientRect();
+      setDropdownPosition({
+        top: rect.bottom,
+        left: portalTarget ? rect.x : 0,
+        width: rect.width ? `${rect.width}px` : "fit-content",
+      });
+    }
+
+    if (show) {
+      const handleClickOutside = (event: MouseEvent) => {
+        const target = event.target as Node;
+
+        if (triggerRef.current && !triggerRef.current.contains(target)) {
+          toggleShow();
+        }
+      };
+
+      document.addEventListener("mousedown", handleClickOutside);
+
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }
+  }, [show]);
 
   const rootClass = className ? `${cx.Outlined} ${className}` : cx.Outlined;
   const suffixClass = show
     ? "rotate-180 transition-transform"
     : "transition-transform";
 
+  const dropdownElement = (
+    <div
+      style={{
+        position: "absolute",
+        top: `${dropdownPosition.top}px`,
+        left: `${dropdownPosition.left}px`,
+        width: dropdownPosition.width,
+        zIndex: 9999,
+        display: show ? "block" : "none",
+        ...styles?.dropdown,
+      }}
+      className={cx.Wrapper}
+    >
+      <>
+        {withSearch && (
+          <Search
+            icon={searchIcon}
+            search={inputs.search}
+            onChange={inputs.setSearch}
+            toggleShow={toggleShow}
+          />
+        )}
+        {popupRender ?? (
+          <Dropdown
+            onClick={handleOnSelect}
+            search={inputs.search}
+            multiple={multiple}
+            options={options}
+            selected={selected}
+          />
+        )}
+      </>
+    </div>
+  );
+
   return (
-    <>
+    <div ref={triggerRef} className="relative">
       <div
         style={styles?.root ?? style}
         className={outlined ? `${rootClass} ${cx.Root}` : rootClass} // @todo: add clsx when needed
         onClick={isEmpty ? toggleShow : () => {}}
-        // @todo: outside click to close dropdown
       >
         <Selected
           placeholder={placeholder}
@@ -41,7 +117,7 @@ const Select = ({
           onClick={(value) => handleOnSelect(value, multiple)}
         />
         <span
-          className={isEmpty ? "hidden" : "grow w-full min-h-8"}
+          className={isEmpty ? "hidden" : "grow w-full min-h-8 min-w-2"}
           onClick={toggleShow}
         />
         <span className="justify-end group relative select-none">
@@ -62,55 +138,10 @@ const Select = ({
           )}
         </span>
       </div>
-      <div
-        style={{
-          display: show ? "block" : "none",
-          ...(styles?.dropdown ?? {}),
-        }}
-        className={cx.Wrapper}
-      >
-        {withSearch && (
-          <div className={cx.InputWrapper}>
-            <span>{searchIcon}</span>
-            <input
-              className={cx.Input}
-              onBlur={toggleShow}
-              value={inputs.search}
-              onChange={(e) => {
-                inputs.setSearch(e.target.value);
-              }}
-            />
-            {inputs.search && (
-              <span
-                className="cursor-pointer"
-                onClick={(event) => {
-                  event.stopPropagation();
-                  inputs.setSearch("");
-                }}
-              >
-                {clearIcon}
-              </span>
-            )}
-          </div>
-        )}
-        <ul className={cx.Dropdown}>
-          {/* @todo: i think options need to be filtered by inputs.search? */}
-          {options.map((item) => (
-            <li
-              key={item.value}
-              className={
-                selected.some((val) => val === item.value)
-                  ? `${cx.Item} bg-gray-100`
-                  : cx.Item
-              }
-              onClick={() => handleOnSelect(item.value, multiple, item)}
-            >
-              <HighlightedLabel text={item.label} search={inputs.search} />
-            </li>
-          ))}
-        </ul>
-      </div>
-    </>
+      {portalTarget
+        ? createPortal(dropdownElement, portalTarget)
+        : dropdownElement}
+    </div>
   );
 };
 

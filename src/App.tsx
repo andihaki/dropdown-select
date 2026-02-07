@@ -1,34 +1,38 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./App.css";
 import Select from "./components/select";
 
-function App() {
-  const [count, setCount] = useState(0);
+const options = [
+  {
+    label: "Test",
+    value: "test",
+  },
+  {
+    label: "Ting Test",
+    value: "Ting test",
+  },
+  {
+    label: "Test Test Test",
+    value: "test test test",
+  },
+];
 
+function App() {
   return (
     <>
-      <div className="flex items-center justify-center">
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div className="flex items-start justify-start flex-col relative w-fit h-full gap-2">
+        <div className="flex justify-between gap-3 w-full">
+          <label className="grow font-semibold">With Search</label>
+          <Select options={options} withSearch />
+        </div>
+        <div className="flex justify-between gap-3 w-full">
+          <label className="grow font-semibold">Portal Without Search</label>
+          <Select
+            options={options}
+            portalTarget={document.getElementById("portal-root")}
+            withSearch
+          />
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   );
 }

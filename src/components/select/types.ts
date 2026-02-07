@@ -19,4 +19,6 @@ export interface SelectProps {
   className?: string;
   suffixIcon?: string | ReactNode;
   searchIcon?: string | ReactNode;
+  popupRender?: ReactNode;
+  portalTarget?: HTMLElement | null;
 }
