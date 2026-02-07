@@ -11,16 +11,16 @@ const dirname =
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  root: ".",
+  root: "./demo",
+  base: process.env.GITHUB_PAGES ? "/dropdown-select/" : "/", // Change to your repo name
   build: {
-    outDir: "./dist-demo", // Separate output
+    outDir: "./dist-demo",
     emptyOutDir: true,
   },
   resolve: {
     alias: {
       "@components": path.resolve(dirname, "src/components"),
       "@icons": path.resolve(dirname, "src/icons"),
-      // Alias the package to local src for development
       "dropdown-select-z9": path.resolve(dirname, "src/index.ts"),
     },
   },
