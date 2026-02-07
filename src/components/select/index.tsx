@@ -76,7 +76,7 @@ const Select = ({
         top: `${dropdownPosition.top}px`,
         left: `${dropdownPosition.left}px`,
         width: dropdownPosition.width,
-        zIndex: 9999,
+        zIndex: 1001,
         display: show ? "block" : "none",
         ...styles?.dropdown,
       }}
@@ -115,6 +115,7 @@ const Select = ({
           placeholder={placeholder}
           data={selected}
           onClick={(value) => handleOnSelect(value, multiple)}
+          multiple={multiple}
         />
         <span
           className={isEmpty ? "hidden" : "grow w-full min-h-8 min-w-2"}

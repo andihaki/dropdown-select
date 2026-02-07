@@ -33,26 +33,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 export const WithPortal: Story = {
-  args: {
-    // portalTarget: document.getElementById("portal-here"),
-    portalTarget: document.body,
-  },
-  // render: (args) => (
-  //   <>
-  //     <div id="portal-here" />
-  //     <Select {...args} />
-  //   </>
-  // ),
-
-  // decorators: [
-  //   (Story) => (
-  //     <>
-  //       <div id="portal-here" />
-  //       <Story />
-  //     </>
-  //   ),
-  // ],
-
   render: (args) => {
     // Create portal container in the render function
     const portalRoot =
@@ -67,11 +47,13 @@ export const WithPortal: Story = {
     return (
       <>
         <Select {...args} portalTarget={portalRoot} />
-        <div style={{ background: "blue", height: 100, width: "100%" }} />
-        <div
-          style={{ background: "pink", height: 100, width: "100%" }}
-          id="portal-here"
-        />
+        <div className="w-full h-7 bg-amber-400-500" />
+        <div className="w-full h-7 bg-pink-500" id="portal-here">
+          Portal Target
+        </div>
+        <div className="w-full h-7 bg-blue-500">
+          <h2 className="z-1002">Z-Index 10000</h2>
+        </div>
       </>
     );
   },

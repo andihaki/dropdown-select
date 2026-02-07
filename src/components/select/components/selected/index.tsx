@@ -5,10 +5,11 @@ import cx from "./style";
 interface Props {
   placeholder?: string;
   data: SelectValue[];
+  multiple?: boolean;
   onClick: (value: SelectValue) => void;
 }
 
-const Selected = ({ placeholder, data, onClick }: Props) => {
+const Selected = ({ placeholder, data, onClick, multiple }: Props) => {
   const handleOnClear = (event: SpanEventType, item: SelectValue) => {
     event.preventDefault();
     onClick(item);
@@ -29,7 +30,7 @@ const Selected = ({ placeholder, data, onClick }: Props) => {
         <li key={item} className={cx.Selected}>
           {item}
           <span
-            className="cursor-pointer"
+            className={`${multiple ? "" : "hidden"} cursor-pointer`}
             onClick={(event) => handleOnClear(event, item)}
           >
             {clearIcon}
